@@ -1,6 +1,6 @@
 import os
 import socket
-from commandline import terminal
+from simalia.commandline import terminal
 from threading import Thread
 
 ENCODING = 'utf-8'
@@ -79,7 +79,7 @@ class SocketCommandLine(_CommandLine):
     def run(self):
         print("Waiting for connection on port " + str(self.port))
         self.socket.bind(("127.0.0.1", self.port))
-        terminal.start_python_script("socket_client.py")
+        terminal.start_python_script("commandline/socket_client.py")
         self.__connect()
         while not self.stop:
             try:

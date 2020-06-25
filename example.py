@@ -1,4 +1,6 @@
-from commandline import *
+import random
+
+from simalia.commandline import SocketCommandLine
 
 
 def parse(cmd):
@@ -11,5 +13,14 @@ def parse(cmd):
     return False
 
 
-line = SocketCommandLine(parse, start_client=True)
+def quit():
+    global running
+    running = False
+
+
+running = True
+line = SocketCommandLine(parse, start_client=True, on_quit=quit)
 line.start()
+
+while running:
+    print(random.randint(0, 1000))

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from Utils.data import index
+from simalia.data import index
 
 LOCATION = "best"
 

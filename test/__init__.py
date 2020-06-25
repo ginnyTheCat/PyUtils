@@ -1,0 +1,1 @@
+from simalia.test.timer import timer

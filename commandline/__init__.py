@@ -1,1 +1,1 @@
-from commandline.commandline import *
+from simalia.commandline.commandline import SocketCommandLine, NativeCommandLine
