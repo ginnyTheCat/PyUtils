@@ -1,6 +1,6 @@
 import os
 import socket
-import terminal
+from commandline import terminal
 from threading import Thread
 
 ENCODING = 'utf-8'
