@@ -1,46 +1,91 @@
+from enum import Enum
+
 import matplotlib.pyplot as plt
 from simalia.data import index
 
-LOCATION = "best"
+
+class PlotTypes(Enum):
+    LINE = 1
+    BAR = 2
+    PIE = 3
+    DONUT = 4
 
 
-def bar(names, values, *more_vals):
-    names = _get_names(values, names)
-    more_vals = list(more_vals)
-    more_vals.insert(0, values)
+class Plot:
 
-    width = 0.3
+    def __init__(self, title="", legend=False):
+        self.title = title
+        self.legend = legend
+        self.type = None
 
-    for i, val in enumerate(more_vals):
-        plt.bar([x + (float(i) * width) for x in index(val)], val, width=width)
-    plt.xticks([x + (len(more_vals) - 1.5) * width for x in index(values)], names)
+        self._legend_data = []
 
+        self._keys = []
+        self._values = []
 
-def line(names, values, markers=True):
-    names = _get_names(values, names)
-    plt.plot(list(names), list(values), marker='o' if markers else None, linestyle='solid')
+    def dict(self, dictionary):
+        self._keys = dictionary.keys()
+        self._values.append(dictionary.values())
+        return self
 
+    def keys(self, keys):
+        self._keys = keys
+        return self
 
-def pie(names, values, highlight_first=True, legend=False):
-    names = _get_names(values, names)
-    explode = None
-    if highlight_first:
-        explode = [0.] * len(values)
-        explode[0] = 0.05
-    patches, _ = plt.pie(values, labels=None if legend else names, explode=explode)
-    if legend:
-        plt.legend(patches, names, loc=LOCATION, facecolor='white', framealpha=1)
+    def values(self, *values):
+        self._values += values
+        return self
 
+    def mean(self, val):
+        plt.plot(list(self._keys), [val] * len(self._keys), label="mean", linestyle='--')
+        return self
 
-def donut(names, values):
-    names = _get_names(values, names)
-    plt.pie(values, labels=names, wedgeprops=dict(width=0.4))
+    def line(self, markers=True):
+        self.type = PlotTypes.LINE
 
+        keys = list(self._keys)
+        for val in self._values:
+            plt.plot(keys, list(val), marker='o' if markers else None, linestyle='solid')
+        return self
 
-def _get_names(values, names):
-    if names is None:
-        return index(values)
-    return names
+    def bar(self):
+        self.type = PlotTypes.BAR
+
+        width = 0.3
+        for i, val in enumerate(self._values):
+            plt.bar([x + (float(i) * width) for x in index(val)], val, width=width)
+        plt.xticks([x + (len(self._values) - 1) / 2 * width for x in index(self._keys)], self._keys)
+        return self
+
+    def pie(self, highlight_first=True):
+        self.type = PlotTypes.PIE
+        self._legend_data = self._keys
+
+        explode = None
+        if highlight_first:
+            explode = [0.] * len(self._keys)
+            explode[0] = 0.05
+        plt.pie(self._values[0], labels=self._labels(), explode=explode)
+        return self
+
+    def donut(self):
+        self.type = PlotTypes.DONUT
+        self._legend_data = self._keys
+
+        plt.pie(self._values[0], labels=self._labels(), wedgeprops=dict(width=0.4))
+        return self
+
+    def _labels(self):
+        if self.legend:
+            return None
+        return self._keys
+
+    def draw(self):
+        if self.legend:
+            loc = self.legend if self.legend is not True else "best"
+            plt.legend(self._legend_data, loc=loc)
+        plt.title(self.title)
+        plt.draw()
 
 
 plt.style.use("seaborn")

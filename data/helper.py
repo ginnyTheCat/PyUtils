@@ -1,10 +1,6 @@
 from collections import defaultdict
 
 
-def contains(array, item):
-    return item in set(array)
-
-
 def split_dict(dictionary):
     return dictionary.keys(), dictionary.values()
 
@@ -16,7 +12,17 @@ def index(array):
 def count(func, array):
     res = defaultdict(int)
     for entry in array:
-        res[func(entry)] += 1
+        group = func(entry)
+        res[group] += 1
+    return res
+
+
+def count_list(func, array):
+    res = defaultdict(int)
+    for entry in array:
+        group = func(entry)
+        for item in group:
+            res[item] += 1
     return res
 
 

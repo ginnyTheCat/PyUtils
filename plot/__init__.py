@@ -1,1 +1,1 @@
-from simalia.plot.plot import bar, line, pie, donut
+from simalia.plot.plot import Plot
