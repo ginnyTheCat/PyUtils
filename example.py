@@ -1,6 +1,5 @@
-import random
-
-from simalia.commandline import SocketCommandLine
+from simalia.math import *
+from simalia.recommended import *
 
 
 def parse(cmd):
@@ -18,9 +17,22 @@ def quit():
     running = False
 
 
-running = True
+"""running = True
 line = SocketCommandLine(parse, start_client=True, on_quit=quit)
 line.start()
 
 while running:
-    print(random.randint(0, 1000))
+    print(random.randint(0, 1000))"""
+
+x = -n(1) / (n(10) % n(6) - n(-5) * n(100) / n(30) ** n(3))
+print(x)
+res = x.calc()
+print()
+print(res.latex())
+print(res)
+
+pi = Pi(5)
+sin = Sine(n(10))
+print()
+print(pi, "=", pi.calc())
+print(sin, "=", sin.calc())

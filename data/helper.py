@@ -26,10 +26,10 @@ def count_list(func, array):
     return res
 
 
-def sort(data, by_key=True, key=lambda x: x, reverse=False):
+def sort(data, descending=False, value_based=True, key=None):
     if isinstance(data, dict):
-        return dict(sorted(data.items(), key=lambda x: key(x[not by_key]), reverse=reverse))
-    return sorted(data, key=key, reverse=reverse)
+        return dict(sorted(data.items(), key=key if key else lambda x: x[value_based], reverse=descending))
+    return sorted(data, key=key, reverse=descending)
 
 
 def first(func, array):

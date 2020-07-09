@@ -48,13 +48,26 @@ class Plot:
             plt.plot(keys, list(val), marker='o' if markers else None, linestyle='solid')
         return self
 
-    def bar(self):
+    def bar(self, horizontal=False):
         self.type = PlotTypes.BAR
+
+        fig, ax = plt.subplots()
 
         width = 0.3
         for i, val in enumerate(self._values):
-            plt.bar([x + (float(i) * width) for x in index(val)], val, width=width)
-        plt.xticks([x + (len(self._values) - 1) / 2 * width for x in index(self._keys)], self._keys)
+            positions = [x + (float(i) * width) for x in index(val)]
+            if horizontal:
+                ax.barh(positions, val, height=width)
+            else:
+                ax.bar(positions, val, width=width)
+        label_pos = [x + (len(self._values) - 1) / 2 * width for x in index(self._keys)]
+        if horizontal:
+            ax.set_yticks(label_pos)
+            ax.set_yticklabels(self._keys)
+            ax.invert_yaxis()
+        else:
+            ax.set_xticks(label_pos)
+            ax.set_xticklabels(self._keys)
         return self
 
     def pie(self, highlight_first=True):
